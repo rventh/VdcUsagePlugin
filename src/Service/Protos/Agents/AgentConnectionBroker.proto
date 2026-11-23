@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Veeam.AC.Service.Agents";
+
+service AgentConnectionBroker {
+	rpc getAgentEndpoint (GetAgentEndpointRequest) returns (GetAgentEndpointReply);
+}
+
+
+message GetAgentEndpointRequest {
+	string pluginId = 1;
+	string agentId = 2;
+}
+
+message GetAgentEndpointReply {
+	string agentEndpoint = 1;
+}

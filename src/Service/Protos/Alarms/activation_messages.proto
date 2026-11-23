@@ -1,0 +1,79 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "alarm_severity_variants.proto";
+
+message ActivateAlarmsRequest {
+  string pluginId = 1; // UUID of plugin  
+  repeated AlarmActivationParams activations = 2; // list of parameters for each alarm that needs to be activated
+}
+
+message ResolveAlarmsRequest {
+  string pluginId = 1; // UUID of plugin
+  repeated string activation_ids = 2;
+  optional string comment = 3; // optional comment detailing the reason for resolving the alarm
+  google.protobuf.Timestamp triggered_at = 4; // timestamp indicating when the alarm was resolved, consider keep it UTC based
+}
+
+message AcknowledgeAlarmsRequest {
+  string pluginId = 1; // UUID of plugin
+  repeated string activation_ids = 2;
+  optional string comment = 3; // optional comment detailing the reason for acknowledging the alarm
+  google.protobuf.Timestamp triggered_at = 4; // timestamp indicating when the alarm was acknowledged, consider keep it UTC based
+}
+
+message IgnoreAlarmsRequest {
+  string pluginId = 1; // UUID of plugin
+  repeated string activation_ids = 2;
+  optional string comment = 3; // optional comment detailing the reason for ignoring the alarm
+  google.protobuf.Timestamp triggered_at = 4; // timestamp indicating when the alarm was ignored, consider keep it UTC based
+}
+
+message SubscribeAlarmUpdatesRequest{
+  string pluginId = 1; // UUID of plugin
+  repeated AlarmStatusEventTypeFilter only_types = 2; // events types filter
+}
+
+enum AlarmStatusEventTypeFilter {
+  ALARM_STATUS_EVENT_ACTIVATED = 0;
+  ALARM_STATUS_EVENT_RESOLVED = 1;
+  ALARM_STATUS_EVENT_ACKNOWLEDGED = 2;
+  ALARM_STATUS_EVENT_IGNORED = 3;
+}
+
+
+message AlarmActivationParams {
+  // A unique identifier for this specific alarm activation instance.
+  // Used to track and manage the lifecycle of the alarm activation.
+  string activation_id = 1;
+
+  // The identifier of the alarm template used for this activation.
+  string template_id = 2;
+
+  // The timestamp indicating when the alarm was triggered. Consider keep it UTC based. 
+  google.protobuf.Timestamp triggered_at = 3;
+
+  // The title of the activation event, suitable for display in an alarms grid.
+  // It should be concise yet descriptive enough to identify the activation event at a glance.
+  string name = 4;
+
+  // An optional detailed description of the activation event, outlining what has failed.
+  optional string description = 5;
+
+  // The severity level of the activation event, indicating the urgency or impact of the situation.
+  AlarmSeverity severity = 6;
+
+  // An optional reference ID to the specific infrastructure object related to the alarm.
+  // Helps in identifying the exact component or system affected.
+  optional string object_id = 7;
+
+  // An optional name for the infrastructure object related to the alarm.
+  // Provides a more user-friendly reference to the affected subject.
+  optional string object_name = 8;
+
+  // An optional type designation for the infrastructure object.
+  // Useful for understanding the nature or category of the affected entity.
+  optional string object_type = 9;
+  
+  optional string organizationUid = 10;
+} 

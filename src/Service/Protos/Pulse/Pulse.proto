@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Veeam.AC.Pulse.Grpc";
+
+service PulseService {
+  rpc getPulseConfiguration (GetPulseConfigurationRequest) returns (GetPulseConfigurationReply);
+  rpc getPulseLicenses (GetPulseLicensesRequest) returns (GetPulseLicensesReply);
+  rpc downloadPulseLicense (DownloadPulseLicenseRequest) returns (DownloadPulseLicenseReply);
+  rpc copyPulseLicense (CopyPulseLicenseRequest) returns (CopyPulseLicenseReply);
+}
+
+message GetPulseConfigurationRequest {
+  string userUid = 1;
+}
+
+message GetPulseConfigurationReply {
+  PulseConfiguration Configuration = 1;
+}
+
+message GetPulseLicensesRequest {
+  string pluginId = 1;
+  string userUid = 2;
+}
+
+message GetPulseLicensesReply {
+  repeated PulseLicense Licenses = 1;
+}
+
+message DownloadPulseLicenseRequest {
+  string pluginId = 1;
+  string userUid = 2;
+  string licenseUid = 3;
+}
+
+message DownloadPulseLicenseReply {
+  string data = 1;
+}
+
+message CopyPulseLicenseRequest {
+  string pluginId = 1;
+  string userUid = 2;
+  string licenseUid = 3;
+}
+
+message CopyPulseLicenseReply {
+  PulseLicense license = 1;
+}
+
+message PulseLicenseWorkload {
+  string workloadId = 1;
+  string name = 2;
+  double multiplier = 3;
+  int32 count = 4;
+}
+
+message PulseLicense {
+  string instanceUid = 1;
+  optional string licenseId = 2; 
+  PulseLicenseType type = 3;
+  PulseLicenseAssignStatus assignStatus = 4;
+  PulseLicenseUsageType usageType = 5;
+  optional string contractId = 6;
+  optional string createdBy = 7;
+  string productId = 8; 
+  optional string description = 9;
+  optional google.protobuf.Timestamp expirationDate = 10;
+  double points = 11; 
+  PulseLicenseAutomaticExtensionStatus automaticExtensionStatus = 12;
+  PulseLicenseAutomaticReportingStatus automaticReportingStatus = 13;
+  optional string assignedCompanyUid = 14;
+  optional string assignedResellerUid = 15;
+  repeated PulseLicenseWorkload workloads = 16;
+}
+
+message PulseConfiguration {
+  PulseConfigurationStatus status = 1;
+  string statusMessage = 2;
+  bool isCompanyMappingEnabled = 3;
+  bool isLicenseManagementEnabled = 4;
+  bool isPushingNewCompaniesToPulseEnabled = 5;
+  google.protobuf.Timestamp lastUpdateDate = 6;
+  google.protobuf.Timestamp tokenExpirationDate = 7;
+}
+
+enum PulseLicenseType {
+  PulseLicenseType_Unknown = 0;
+  PulseLicenseType_Rental = 1;
+  PulseLicenseType_Internal = 2;
+}
+
+enum PulseLicenseAssignStatus {
+  PulseLicenseAssignStatus_Unknown = 0;
+  PulseLicenseAssignStatus_Assigned = 1;
+  PulseLicenseAssignStatus_Assigning = 2;
+  PulseLicenseAssignStatus_FailedToAssign = 3;
+  PulseLicenseAssignStatus_Revoking = 4;
+  PulseLicenseAssignStatus_FailedToRevoke = 5;
+  PulseLicenseAssignStatus_NotAssigned = 6;
+  PulseLicenseAssignStatus_Editing = 7;
+  PulseLicenseAssignStatus_FailedToEdit = 8;
+}
+
+enum PulseLicenseUsageType {
+  PulseLicenseUsageType_Unknown = 0;
+  PulseLicenseUsageType_SingleCustomerUse = 1;
+  PulseLicenseUsageType_MultiCustomerUse = 2;
+  PulseLicenseUsageType_InternalUse = 3;
+}
+
+enum PulseLicenseAutomaticExtensionStatus {
+  PulseLicenseAutomaticExtensionStatus_Unknown = 0;
+  PulseLicenseAutomaticExtensionStatus_Off = 1;
+  PulseLicenseAutomaticExtensionStatus_On = 2;
+  PulseLicenseAutomaticExtensionStatus_AlwaysOn = 3;
+  PulseLicenseAutomaticExtensionStatus_AlwaysOff = 4;
+  PulseLicenseAutomaticExtensionStatus_SwitchingToOn = 5;
+  PulseLicenseAutomaticExtensionStatus_SwitchingToOff = 6;
+}
+
+enum PulseLicenseAutomaticReportingStatus {
+  PulseLicenseAutomaticReportingStatus_Unknown = 0;
+  PulseLicenseAutomaticReportingStatus_Off = 1;
+  PulseLicenseAutomaticReportingStatus_On = 2;
+  PulseLicenseAutomaticReportingStatus_AlwaysOn = 3;
+  PulseLicenseAutomaticReportingStatus_AlwaysOff = 4;
+  PulseLicenseAutomaticReportingStatus_SwitchingToOn = 5;
+  PulseLicenseAutomaticReportingStatus_SwitchingToOff = 6;
+}
+
+enum PulseConfigurationStatus {
+  PulseConfigurationStatus_Unknown = 0;
+  PulseConfigurationStatus_NotConfigured = 1;
+  PulseConfigurationStatus_Configured = 2;
+  PulseConfigurationStatus_Warning = 3;
+  PulseConfigurationStatus_Error = 4;
+}

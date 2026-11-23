@@ -1,0 +1,136 @@
+openapi: 3.0.3
+info:
+  title: VDC Usage Plugin
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: https://localhost/
+tags:
+  - name: usage
+    description: VDC usage from Veeam Pulse
+  - name: settings
+    description: Plugin settings
+paths:
+
+# main page: the plugin tile in the VSPC Catalog opens /plugins/{pluginId}/
+  /:
+    get:
+      tags:
+        - usage
+      summary: Plugin main page
+      operationId: getMainPage
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/html:
+              schema:
+                type: object
+
+#
+# do not publish these endpoints here
+#
+# /api/v1/healthcheck:
+# /api/v1/readiness:
+# /api/v1/logs:
+# /api/v1/localdata:
+
+  /api/v1/settings:
+    get:
+      tags:
+        - settings
+      summary: Key status
+      operationId: getSettings
+      responses:
+        '200':
+          description: Successful operation
+  /api/v1/settings/apikey:
+    put:
+      tags:
+        - settings
+      summary: Save and test the VSPC API key
+      operationId: saveApiKey
+      responses:
+        '200':
+          description: Successful operation
+    delete:
+      tags:
+        - settings
+      summary: Remove the saved API key
+      operationId: removeApiKey
+      responses:
+        '200':
+          description: Successful operation
+  /api/v1/mapping:
+    get:
+      tags:
+        - settings
+      summary: Tenant to VSPC company mapping
+      operationId: getMapping
+      responses:
+        '200':
+          description: Successful operation
+    put:
+      tags:
+        - settings
+      summary: Set or clear the VSPC company for a tenant
+      operationId: setMapping
+      responses:
+        '200':
+          description: Successful operation
+  /api/v1/usage/refresh:
+    post:
+      tags:
+        - usage
+      summary: Reload usage from VSPC
+      operationId: refreshUsage
+      responses:
+        '200':
+          description: Successful operation
+  /api/v1/usage/options:
+    get:
+      tags:
+        - usage
+      summary: Filter choices
+      operationId: getUsageOptions
+      responses:
+        '200':
+          description: Successful operation
+  /api/v1/usage/rows:
+    get:
+      tags:
+        - usage
+      summary: Usage report rows
+      operationId: getUsageRows
+      responses:
+        '200':
+          description: Successful operation
+  /api/v1/usage/dashboard:
+    get:
+      tags:
+        - usage
+      summary: Dashboard aggregates
+      operationId: getUsageDashboard
+      responses:
+        '200':
+          description: Successful operation
+  /api/v1/usage/export/csv:
+    get:
+      tags:
+        - usage
+      summary: CSV export
+      operationId: exportUsageCsv
+      responses:
+        '200':
+          description: Successful operation
+  /api/v1/usage/export/pdf:
+    get:
+      tags:
+        - usage
+      summary: PDF export
+      operationId: exportUsagePdf
+      responses:
+        '200':
+          description: Successful operation

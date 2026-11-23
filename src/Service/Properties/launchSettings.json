@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Veeam.AC.Service.Plugin.Service": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "DEVELOPMENT"
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+﻿syntax = "proto3";
+
+message ListTemplatesRequest{
+  string pluginId = 1; // UUID of plugin
+}
+
+message ListTemplatesResponse{
+  string pluginId = 1; // UUID of plugin
+  repeated AlarmTemplateDefinition templates = 2;
+}
+
+message UpdateTemplatesRequest { 
+  string pluginId = 1; // UUID of plugin
+  repeated AlarmTemplateDefinition templates = 2;
+}
+
+message ObsolesceTemplatesRequest {
+  string pluginId = 1; // UUID of plugin
+  repeated string template_ids = 2;
+}
+
+message AlarmTemplateDefinition {
+  string template_id = 1; // unique identifier for the alarm template
+  string name = 2; // name of the alarm template
+  optional string knowledge_summary = 3; // brief introduction or context for the alarm template
+  optional string knowledge_cause = 4; // detailed explanation of the possible causes of the alarm
+  optional string knowledge_resolution = 5; // step-by-step guide or instructions for resolving the alarm
+  optional string knowledge_custom = 6; // area allows for supplementary details not covered in other knowledge fields
+  optional string knowledge_external_url = 7; // optional URL linking to an external resource that can assist in understanding or resolving the alarm
+}

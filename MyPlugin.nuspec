@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <!-- Required elements-->
+        <id>VdcUsagePlugin</id>
+        <version>1.0.9</version>
+        <description>Shows Veeam Data Cloud (VDC) monthly license usage from Veeam Pulse inside VSPC, with filters, a dashboard and CSV/PDF export.</description>
+        <authors>Raghu</authors>
+        <icon>content\any\any\ui-content\favicon.png</icon>
+    </metadata>
+	<files>
+        <file src="content\**\*.*" target="content\" />
+    </files>
+</package>

@@ -1,0 +1,15 @@
+﻿syntax = "proto3";
+
+message SetIsEnabledRequest {
+  string pluginId = 1; // UUID of plugin  
+  bool enabled = 2;
+}
+
+message GetIsEnabledRequest{
+  string pluginId = 1; // UUID of plugin
+}
+
+message GetIsEnabledResponse {
+  string pluginId = 1; // UUID of plugin
+  bool enabled = 2;
+}

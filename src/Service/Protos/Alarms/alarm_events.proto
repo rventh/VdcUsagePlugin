@@ -1,0 +1,61 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "alarm_severity_variants.proto";
+
+
+message AlarmStatusUpdateResponse {
+  string pluginId = 1; // UUID of plugin
+  string activation_id = 2; // alarm activation
+  string template_id = 3; // alarm description data id
+  google.protobuf.Timestamp triggered_at = 4; // event occurrence time in UTC
+  
+  oneof update {
+      AlarmActivatedEvent activated = 5; 
+      AlarmResolvedEvent resolved = 6;
+      AlarmAcknowledgedEvent acknowledged = 7;
+      AlarmIgnoredEvent ignored = 8;
+  }
+}
+
+message AlarmActivatedEvent {
+  // The title of the activation event, suitable for display in an alarms grid.
+  // It should be concise yet descriptive enough to identify the activation event at a glance.
+  string name = 1;
+
+  // An optional detailed description of the activation event, outlining what has failed.
+  optional string description = 2;
+
+  // The severity level of the activation event, indicating the urgency or impact of the situation.
+  AlarmSeverity severity = 3;
+
+  // An optional reference ID to the specific infrastructure object related to the alarm.
+  // Helps in identifying the exact component or system affected.
+  optional string object_id = 4;
+
+  // An optional name for the infrastructure object related to the alarm.
+  // Provides a more user-friendly reference to the affected subject.
+  optional string object_name = 5;
+
+  // An optional type designation for the infrastructure object.
+  // Useful for understanding the nature or category of the affected entity.
+  optional string object_type = 6; 
+}
+
+message AlarmResolvedEvent {
+  // An optional comment with notes on how the alarm was resolved.
+  // This information is valuable for historical analysis and understanding the resolution process.
+  optional string comment = 1; 
+}
+
+message AlarmAcknowledgedEvent {
+  // An optional comment explaining why the alarm was acknowledged.
+  // This is important for historical records and enables tracking of operator actions or decision-making.
+  optional string comment = 1; 
+}
+
+message AlarmIgnoredEvent {
+  // An optional comment detailing the reason for ignoring the alarm.
+  // Provides context in historical data, allowing for review of why certain alarms were deemed unworthy of action.
+  optional string comment = 1;
+}

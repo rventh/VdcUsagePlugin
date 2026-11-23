@@ -1,0 +1,25 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Veeam.AC.Service.ProductInformation.Grpc";
+
+service ProductInformationService {
+  rpc about (ProductInformationAboutRequest) returns (ProductInformationAboutReply);
+}
+
+message ProductInformationAboutRequest {
+  string pluginId = 1;
+}
+
+message ProductInformationAboutReply {
+  string installationId = 1;
+  string serverVersion = 2;
+  google.protobuf.Timestamp installationDate = 3;
+  string actualVawVersion = 4;
+  string actualValVersion = 5;
+  string actualVamVersion = 6;
+  string windowsManagementAgentVersion = 7;
+  string linuxManagementAgentVersion = 8;
+  string macManagementAgentVersion = 9;
+}

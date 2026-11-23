@@ -1,0 +1,75 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Veeam.AC.Service.OrganizationalStructure";
+
+service OrganizationalStructureService {
+	rpc getProvider (GetProviderRequest) returns (GetProviderReply);
+	rpc getResellers (GetResellersRequest) returns (GetResellersReply);
+	rpc getCompanies (GetCompaniesRequest) returns (GetCompaniesReply);
+	rpc getLocations (GetLocationsRequest) returns (GetLocationsReply);
+	rpc getAgents (GetAgentsRequest) returns (GetAgentsReply);
+}
+
+message GetProviderRequest{
+
+}
+message GetResellersRequest{
+
+}
+message GetCompaniesRequest{
+
+}
+message GetLocationsRequest{
+
+}
+message GetAgentsRequest{
+
+}
+
+message GetProviderReply {
+	Provider provider = 1;
+}
+
+message Provider {
+	string organizationUid = 1;
+	string name = 2;
+}
+
+message GetResellersReply {
+	repeated Reseller resellers = 1;
+}
+
+message Reseller {
+	string organizationUid = 1;
+	string name = 2;
+}
+
+message GetCompaniesReply {
+	repeated Company companies = 1;
+}
+
+message Company {
+	string organizationUid = 1;
+	string name = 2;
+	string managerOrganizationUid = 3;
+}
+
+message GetLocationsReply {
+	repeated Location locations = 1;
+}
+
+message Location {
+	string locationUid = 1;
+	string name = 2;
+	string organizationUid = 3;
+}
+
+message GetAgentsReply {
+	repeated Agent agents = 1;
+}
+
+message Agent {
+	string agentUid = 1;
+	string name = 2;
+	string locationUid = 3;
+}

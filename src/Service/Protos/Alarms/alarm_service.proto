@@ -1,0 +1,56 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "activation_messages.proto";
+import "configuration_messages.proto";
+import "template_messages.proto";
+import "alarm_events.proto";
+
+option csharp_namespace = "Veeam.AC.Service.Alarms.Grpc";
+
+/*
+ * Service provides an interface for managing plugin-related alarms.
+ * All the alarms are integrated into the overall alarming functionality, 
+ * with all corresponding features enabled, such as notifications, user actions 
+ * for manual resolution, or skipping.
+ */
+service AlarmService {
+  // Retrieve the enabled status of the alarm source for the plugin.
+  rpc getIsEnabled(GetIsEnabledRequest) returns (GetIsEnabledResponse);
+  
+  // Enable or disable the alarm source for the plugin. Disabling will hide all alarms 
+  // and stop processing notifications if they are present.
+  rpc setIsEnabled(SetIsEnabledRequest) returns (google.protobuf.Empty);
+
+  // List description data for alarms related to the plugin source.
+  // Each alarm could contain details describing the problem and potential solutions, 
+  // and these templates might be shared across multiple alarm activations.
+  rpc listTemplates(ListTemplatesRequest) returns (ListTemplatesResponse);
+
+  // Update the list of alarm activation descriptions.
+  // Each call with the same IDs will overwrite existing content.
+  rpc updateTemplates(UpdateTemplatesRequest) returns (google.protobuf.Empty);
+
+  // Mark a template as deprecated. All alarms related to deprecated templates will 
+  // be treated as inactive and excluded from processing. 
+  rpc deprecateTemplates(ObsolesceTemplatesRequest) returns (google.protobuf.Empty);
+
+  // Activate alarms, indicating issues with specific infrastructure subjects.
+  // Calling this on already resolved alarms will reactivate them.
+  rpc activateAlarms (ActivateAlarmsRequest) returns (google.protobuf.Empty);
+
+  // Resolve alarms, marking them as indicating that the problem has been resolved.
+  // This action can also be performed through the VSPC UI, and corresponding events can be received via the subscription mechanism. 
+  rpc resolveAlarms (ResolveAlarmsRequest) returns (google.protobuf.Empty);
+
+  // Acknowledge alarms, setting them to a state that indicates operator awareness, with no action required.
+  // This action can also be performed through the VSPC UI, and corresponding events can be received via the subscription mechanism.
+  rpc acknowledgeAlarms (AcknowledgeAlarmsRequest) returns (google.protobuf.Empty);
+
+  // Ignore alarms, hiding them without any action.
+  // This action can also be performed through the VSPC UI, and corresponding events can be received via the subscription mechanism.
+  rpc ignoreAlarms (IgnoreAlarmsRequest) returns (google.protobuf.Empty);
+
+  // Subscribe to receive updates about user actions performed on plugin-related alarms (e.g., acknowledgment, manual resolution).
+  rpc subscribeAlarmUpdates (SubscribeAlarmUpdatesRequest) returns (stream AlarmStatusUpdateResponse);
+}

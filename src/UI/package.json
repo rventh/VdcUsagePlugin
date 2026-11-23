@@ -1,0 +1,58 @@
+{
+    "name": "MyPlugin",
+    "version": "1.0.0",
+    "description": "MyPlugin",
+    "private": true,
+    "config": {
+        "pluginId": "8D16300803E14F9DB0B29FED27A0C447"
+    },
+    "scripts": {
+        "check-types": "tsc --target esnext --noEmit",
+        "start": "npm run build:development -- --watch",
+        "build:development": "webpack --mode=development",
+        "build:production": "webpack --mode=production && npm run copyAllFiles",
+        "copyFavIcon": "npx --yes cpx-fixed \"public/favicon.png\" \"build/ui-content\"",
+        "copyConfigData": "npx --yes cpx-fixed \"public/page-config.json\" \"build/ui-layout-config\"",
+        "copyAllFiles": "npm run copyConfigData && npm run copyFavIcon",
+        "dev-server": "cd build/ui-content && dev-server -p 3003 -l 35733 -t https://localhost:3500/externalPluginAPI"
+    },
+    "type": "module",
+    "sideEffects": [
+        "*.css"
+    ],
+    "browserslist": {
+        "production": [
+            "supports es6"
+        ],
+        "development": [
+            "last 2 major versions"
+        ]
+    },
+    "dependencies": {
+        "@veeam/components": "file:/../../npm_packages/uikit-components-6.18.3.tgz",
+        "@veeam/icons": "file:/../../npm_packages/icons-1.12.0.tgz",
+        "@veeam-vspc/shared": "file:/../../npm_packages/veeam-vspc-shared-6.14.0.tgz",
+        "dayjs": "^1.10.4",
+        "deepmerge": "^4.2.2",
+        "dhondt": "^0.1.0",
+        "dompurify": "^3.2.3",
+        "rc-tree": "5.7.2",
+        "react-input-mask": "^2.0.4",
+        "react-router-dom": "6.26.0",
+        "rxjs": "7.8.1",
+        "typed-path": "^2.2.3"
+    },
+    "devDependencies": {
+        "@types/clone-deep": "^4.0.1",
+        "@types/dompurify": "3.0.5",
+        "@types/lodash": "4.14.177",
+        "@types/react": "^18.2.14",
+        "@types/react-dom": "^18.2.6",
+        "@types/react-input-mask": "^2.0.4",
+        "@veeam-extjs/dev-server": "file:/../../npm_packages/veeam-extjs-dev-server-2.0.0.tgz",
+        "@veeam-vspc/configs": "file:/../../npm_packages/veeam-vspc-configs-3.2.5.tgz",
+        "csstype": "^3.0.8",
+        "javascript-stringify": "2.1.0",
+        "strip-json-comments": "^3.1.1"
+    }
+}

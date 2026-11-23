@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+
+
+enum AlarmSeverity {
+  ALARM_SEVERITY_INFORMATION = 0;
+  ALARM_SEVERITY_WARNING = 1;
+  ALARM_SEVERITY_ERROR = 2;
+  ALARM_SEVERITY_FATAL = 3;
+}

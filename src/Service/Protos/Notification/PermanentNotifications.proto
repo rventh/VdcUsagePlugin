@@ -1,0 +1,66 @@
+﻿syntax = "proto3";
+
+//import "google/protobuf/empty.proto";
+
+option csharp_namespace = "Veeam.AC.Service.PermanentNotifications.Grpc";
+
+/**
+ * Service for raising notifications for users/organizations.
+ */
+service PermanentNotificationsService {
+	// create or update notification for specified organization and roles in this organization.
+	rpc savePermanentNotificationForOrganization (SavePermanentNotificationForOrganizationRequest) returns (PermanentNotificationReply);
+	// create or update notification for specified user.
+	rpc savePermanentNotificationForUser (SavePermanentNotificationForUserRequest) returns (PermanentNotificationReply);
+	// dismiss notification for user
+	rpc dismissPermanentNotification (DismissPermanentNotificationRequest) returns (DismissPermanentNotificationReply);
+} 
+
+message SavePermanentNotificationForOrganizationRequest {
+	string pluginId = 1; // UUID of plugin.
+	string organizationUid = 2;  // Organization ID.
+	repeated int32 rolesFilter = 3; // List of roles to show this notification.
+	PermanentNotification notification = 4; // Notification message body.
+}
+
+message SavePermanentNotificationForUserRequest {
+	string pluginId = 1; // UUID of plugin.
+	string userUid = 2; // User ID.
+	PermanentNotification notification = 4; // Notification message body.
+}
+
+message PermanentNotificationReply {
+	PermanentNotification notification = 1; // Created/Update notification message.
+}
+
+message DismissPermanentNotificationRequest {
+	string pluginId = 1; // UUID of plugin.
+	string notificationUid = 2; // Notification ID.
+	string userUid = 3; // User ID of user to dismiss notification message.
+}
+
+message DismissPermanentNotificationReply {
+	bool isDismissed = 1;
+}
+
+message PermanentNotification {
+	string instanceUid = 1; // Notification ID.
+	string title = 2; // Title of notification message.
+	string content = 3; // Content of notification message.
+	PermanentNotificationSeverity severity = 4; // Severity of notification message.
+	string remark = 5;  
+	PermanentNotificationType type = 6;  // Type of notification message.
+}
+
+enum PermanentNotificationSeverity {
+	info = 0;
+	warning = 1;
+	error = 2;
+}
+
+enum PermanentNotificationType {
+	Unknown = 0;
+	VspcUpdate = 1;
+	VboCollectOperationTelemetry = 2;
+	PluginInstallation = 3;
+}

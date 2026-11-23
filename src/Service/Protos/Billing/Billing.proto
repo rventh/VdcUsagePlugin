@@ -1,0 +1,83 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Veeam.AC.Service.Billing";
+
+service BillingService {
+	rpc registerCharges (RegisterChargesRequest) returns (RegisteredChargesReply);
+	rpc getRegisteredCharges (GetRegisteredChargesRequest) returns (RegisteredChargesReply);
+	rpc saveUsage (SaveUsageRequest) returns (SaveUsageReply);
+}
+
+message RegisterChargesRequest {
+	string pluginId = 1;
+	repeated Charge charges = 2;
+}
+
+message Charge {
+	string instanceUid = 1;
+	string displayName = 2;
+	string categoryIdentity = 3;
+	string categoryDisplayName = 4;
+	MeasureCategory measureCategory = 5;
+	AggregationType aggregationType = 6;
+}
+
+enum MeasureCategory {
+    MeasureCategory_None = 0;
+	MeasureCategory_Size = 1;
+	MeasureCategory_Units = 2;
+	MeasureCategory_Time = 3;
+}
+
+enum AggregationType {
+    AggregationType_Last = 0;
+    AggregationType_Sum = 1;
+    AggregationType_Average = 2;
+    AggregationType_Max = 3;
+    AggregationType_Min = 4;
+}
+
+message RegisteredChargesReply {
+	repeated Charge charges = 1;
+}
+
+message GetRegisteredChargesRequest {
+	string pluginId = 1;
+}
+
+message SaveUsageRequest {
+	string pluginId = 1;
+	repeated Usage usages = 2;
+}
+
+message SaveUsageReply {
+	
+}
+
+message Usage {
+	string usageTypeUid = 1;
+	string usageTypeDisplayName = 2;
+	string chargeUid = 3;
+	MeasureType measure = 4;
+	optional double quantity = 5;
+	string locationUid = 6;
+	string date = 7;
+}
+
+enum MeasureType
+{
+    MeasureType_None = 0;
+    MeasureType_Bytes = 1;
+    MeasureType_KB = 2;
+    MeasureType_MB = 3;
+    MeasureType_GB = 4;
+    MeasureType_TB = 5;
+    MeasureType_PB = 6;
+    MeasureType_Seconds = 10;
+    MeasureType_Minutes = 11;
+    MeasureType_Hours = 12;
+    MeasureType_Days = 13;
+    MeasureType_Weeks = 14;
+    MeasureType_Months = 15;
+    MeasureType_Units = 100;
+}

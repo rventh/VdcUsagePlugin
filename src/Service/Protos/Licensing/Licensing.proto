@@ -1,0 +1,200 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Veeam.AC.Service.Licensing.Grpc";
+
+service LicensingService {
+  rpc registerProducts (RegisterProductsRequest) returns (google.protobuf.Empty);
+  rpc unregisterProducts (UnregisterProductsRequest) returns (google.protobuf.Empty);
+  rpc updateProductLicenseInfo (UpdateProductLicenseInfoRequest) returns (google.protobuf.Empty);
+  rpc updateProductMappedOrganizations (UpdateProductMappedOrganizationsRequest) returns (google.protobuf.Empty);
+  rpc pushCurrentUsage (PushCurrentUsageRequest) returns (google.protobuf.Empty);
+  rpc getLicenseBody (google.protobuf.Empty) returns (GetLicenseBodyReply);
+  rpc getLicensePeriod (google.protobuf.Empty) returns (GetLicensePeriodReply);
+  rpc pushReportedUsage (PushReportedUsageRequest) returns (google.protobuf.Empty);
+  rpc isApprovalRequested (IsApprovalRequestedRequest) returns (IsApprovalRequestedReply);
+  rpc updateLatestApprovalStatus (UpdateLatestApprovalStatusRequest) returns (google.protobuf.Empty);
+}
+
+message RegisterProductsRequest {
+  string pluginId = 1;
+  repeated Product products = 2;
+  
+  message Product {
+    string instanceUid = 1;
+    string name = 2;
+    string organizationUid = 3;
+    string locationUid = 4;
+    License license = 5;
+    string Version = 6;
+    repeated MappedOrganization relatedOrganizations = 7;
+  }
+}
+
+message UnregisterProductsRequest {
+  string pluginId = 1;
+}
+
+message UpdateProductLicenseInfoRequest {
+  string pluginId = 1;
+  string instanceUid = 2;
+  License license = 3;
+}
+
+message UpdateProductMappedOrganizationsRequest {
+  string pluginId = 1;
+  string instanceUid = 2;
+  repeated MappedOrganization mappedOrganizations = 3;
+}
+
+message PushCurrentUsageRequest {
+  string pluginId = 1;
+  repeated ProductCurrentUsage CurrentUsageList = 2;
+}
+
+message PushReportedUsageRequest {
+  string pluginId = 1;
+  repeated ProductReportedUsage ReportedUsageList = 2;
+}
+
+message UpdateLatestApprovalStatusRequest {
+  string pluginId = 1;
+  string instanceUid = 2;
+  ApprovalStatus Status = 3;
+  optional string StatusMessage = 4;
+}
+
+message IsApprovalRequestedRequest {
+  string pluginId = 1;
+  string instanceUid = 2; 
+}
+
+message IsApprovalRequestedReply {
+  bool isRequested = 1;
+  // todo: adjusts
+}
+
+message GetLicensePeriodReply {
+  bool IsReportingInProgress = 1;
+  LicensePeriod CurrentLicensePeriod = 2;
+  message LicensePeriod {
+    string periodUid = 1;
+    google.protobuf.Timestamp start = 2;
+    google.protobuf.Timestamp end = 3;
+  }
+}
+
+message GetLicenseBodyReply {
+  string body = 1;
+}
+
+message ProductReportedUsage {
+  string periodUid = 1;
+  string instanceUid = 2;
+  License licenseInfo = 3;
+  PlatformsInfo platformsInfo = 4;
+  ReportedUsageStatus Status = 5;
+  repeated OrganizationUsage organizationUsageList = 6;
+}
+
+message ProductCurrentUsage {
+  string instanceUid = 1;
+  License licenseInfo = 2;
+  PlatformsInfo platformsInfo = 3;
+  repeated OrganizationUsage organizationUsageList = 4;
+}
+
+message OrganizationUsage {
+  string organizationUid = 1;
+  repeated LocationUsage locationUsageList = 2;
+
+  message LocationUsage {
+    string locationUid = 1;
+    repeated Workload workloads = 2;
+  }
+}
+
+message MappedOrganization {
+  string organizationUid = 1;
+}
+
+message License {
+  string licenseId = 1;
+  LicenseEdition edition = 2;
+  LicenseType type = 3;
+  CommonLicenseState state = 4;
+  string licenseCompany = 5;
+  string supportId = 6;
+}
+
+enum LicenseType {
+  LicenseType_NotInstalled = 0;
+  LicenseType_Rental = 1;
+  LicenseType_NFR = 2;
+  LicenseType_Perpetual = 3;
+  LicenseType_Evaluation = 4;
+  LicenseType_Subscription = 5;
+  LicenseType_Full = 6;
+  LicenseType_Promo = 7;
+}
+
+enum LicenseEdition {
+  LicenseEdition_Empty = 0;
+  LicenseEdition_Standard = 1;
+  LicenseEdition_Community = 2;
+  LicenseEdition_Enterprise = 3;
+  LicenseEdition_EnterprisePlus = 4;
+}
+
+enum CommonLicenseState {
+  CommonLicenseState_Unknown = 0;
+  CommonLicenseState_Valid = 1;
+  CommonLicenseState_Warning = 2;
+  CommonLicenseState_Error = 3;
+  CommonLicenseState_Unlicensed = 4;
+}
+
+message PlatformsInfo {
+  repeated Group groups = 1;
+  repeated Platform platforms = 2;
+
+  message Group {
+    string groupUid = 1;
+    string pluralName = 2;
+    string singularName = 3;
+  }
+
+  message Platform {
+    string platformUid = 1;
+    repeated Type types = 2;
+    message Type {
+      int32 typeId = 1;
+      string displayName = 2;
+      string jsonCounterName = 3;
+      double Weight = 4;
+      optional string groupUid = 5;
+    }
+  }
+}
+
+message Workload {
+  string platformUid = 1;
+  int32 typeId = 2;
+  int32 usedCount = 3;
+  int32 rentalCount = 4;
+  int32 newCount = 5;
+}
+
+enum ReportedUsageStatus {
+  ReportedUsageStatus_Pending = 0;
+  ReportedUsageStatus_Reported = 1;
+}
+
+enum ApprovalStatus {
+  ApprovalStatus_Success = 0;
+  ApprovalStatus_Warning = 1;
+  ApprovalStatus_Error = 2;
+  ApprovalStatus_NotApprovable = 3;
+}
