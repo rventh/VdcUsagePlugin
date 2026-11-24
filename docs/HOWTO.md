@@ -10,6 +10,12 @@ This guide takes about ten minutes. You need a VSPC account with the **Portal Ad
 
 ## 2. Create a VSPC API key
 
+> **About the key VSPC creates on install.** Older builds of this plugin let VSPC auto-generate a REST API key
+> (a REST API Keys entry with the description "Auto-generated key for '...' plugin"). The plugin never used it.
+> From 1.0.10 the plugin asks VSPC not to create one. If you installed an earlier build, you can safely delete that
+> entry in **Configuration > REST API Keys**. The plugin only uses the read-only key you create below.
+
+
 The plugin reads Veeam Data Cloud usage through the VSPC REST API, so it needs an API key. Create a dedicated key for it:
 
 1. In VSPC, go to **Configuration**, then **REST API Keys**.

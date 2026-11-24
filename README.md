@@ -37,7 +37,8 @@ The signed package is written to `build\`.
 ## Security notes
 
 - Never commit `sign.p12`, API keys or passwords. The `.gitignore` already excludes certificates and key files.
-- The plugin only calls the VSPC REST API it is installed on, with the key you give it.
+- The plugin only calls the VSPC REST API it is installed on, with the key you give it. Use a read-only key.
+- VSPC can auto-generate an unused API key when a plugin is installed. This plugin asks VSPC not to (since 1.0.10). On older builds, delete the entry named "Auto-generated key for ... plugin" in REST API Keys.
 - Exports neutralise spreadsheet formulas in tenant and product names.
 
 ## Licence

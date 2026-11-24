@@ -3,7 +3,7 @@
     <metadata>
         <!-- Required elements-->
         <id>VdcUsagePlugin</id>
-        <version>1.0.9</version>
+        <version>1.0.10</version>
         <description>Shows Veeam Data Cloud (VDC) monthly license usage from Veeam Pulse inside VSPC, with filters, a dashboard and CSV/PDF export.</description>
         <authors>Raghu</authors>
         <icon>content\any\any\ui-content\favicon.png</icon>
